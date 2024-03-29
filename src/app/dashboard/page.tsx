@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,6 +11,17 @@ import {
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { signOut, useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
+import { DropdownMenuLabel } from "@radix-ui/react-dropdown-menu";
 
 const notifications = [
   {
@@ -27,17 +39,41 @@ const notifications = [
 ];
 type CardProps = React.ComponentProps<typeof Card>;
 export default function Dashboard() {
+  const { data: session } = useSession();
+  console.log(session, "session etails");
+  if (!session) redirect("/");
   return (
     <main className="flex justify-center items-center mt-8">
       <Card className={cn("w-[100%] m-8")}>
         <CardHeader>
           <CardTitle>Dashboard</CardTitle>
-          <CardDescription>Fixtures and performance</CardDescription>
+          <CardDescription className="flex flex-row justify-between items-center">
+            <p>Fixtures and performance</p>
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <Avatar>
+                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-[100%] p-4">
+                <DropdownMenuLabel>{session?.user?.name}</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => {
+                    signOut();
+                  }}
+                >
+                  Sign out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className="grid gap-4">
             {notifications.map((notification, index) => (
-              <Link href="/dashboard/1" key={index}>
+              <Link href="/matches/1" key={index}>
                 <div className=" flex items-center space-x-4 rounded-md border p-4 cursor-pointer">
                   <div className="flex-1 space-y-1">
                     <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
@@ -61,6 +97,9 @@ export default function Dashboard() {
                       </Avatar>
                     </div>
                   </div>
+                  <Button variant="outline">
+                    <Link href="/configure">Edit my team</Link>
+                  </Button>
                 </div>
               </Link>
             ))}
@@ -68,8 +107,7 @@ export default function Dashboard() {
         </CardContent>
         <CardFooter>
           <Button className="w-full" variant="outline">
-            {/* <Check className="mr-2 h-4 w-4" /> Mark all as read */}Configure
-            teams for other matches
+            <Link href="/configure">Configure teams for other matches</Link>
           </Button>
         </CardFooter>
       </Card>

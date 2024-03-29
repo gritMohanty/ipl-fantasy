@@ -1,3 +1,4 @@
+"use client"
 import { Card, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import {

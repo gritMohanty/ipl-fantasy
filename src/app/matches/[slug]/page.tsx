@@ -1,3 +1,4 @@
+"use client"
 import { AvatarImage, Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
