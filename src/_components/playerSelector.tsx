@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { players } from "@/app/players";
 import { Button } from "@/components/ui/button";
@@ -18,29 +18,38 @@ import {
 
 import { Input } from "@/components/ui/input";
 
-export default function PlayerSelector({ tierType }: { tierType: string }) {
-  const [team1Players, setTeam1Players] = useState(players[0].players);
-  const team1name = players[0].team;
-  const [team2Players, setTeam2Players] = useState(players[1].players);
-  const team2name = players[1].team;
+export default function PlayerSelector({
+  team1 = [],
+  team2 = [],
+  team1Name = "",
+  team2Name = "",
+}: any) {
+  // console.log(team1Name, team2Name)
+  const [team1Players, setTeam1Players] = useState([]);
+  const [team2Players, setTeam2Players] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedPlayer, setSelectedPlayer] = useState("Select your player");
   const getPlayerTeam = () => {
     if (selectedPlayer === "Select your player") {
       return "No Player selected";
     } else {
-      const findPlayerinTeam1 = players[0].players.filter(
-        (player) => player.name === selectedPlayer
+      const findPlayerinTeam1 = team1Players.filter(
+        (player) => player.player_name === selectedPlayer
       );
 
-      const findPlayerinTeam2 = players[1].players.filter(
-        (player) => player.name === selectedPlayer
+      const findPlayerinTeam2 = team2Players.filter(
+        (player) => player.player_name === selectedPlayer
       );
 
-      if (findPlayerinTeam1.length) return team1name;
-      if (findPlayerinTeam2.length) return team2name;
+      if (findPlayerinTeam1.length) return team1Name;
+      if (findPlayerinTeam2.length) return team2Name;
     }
   };
+  useEffect(() => {
+    if (team1.length) setTeam1Players([...team1]);
+    if (team2.length) setTeam2Players([...team2]);
+  }, [team1, team2]);
+
   return (
     <div className="rounded-md border p-4">
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -53,7 +62,7 @@ export default function PlayerSelector({ tierType }: { tierType: string }) {
                   : "bg-lime-500"
               }  mt-1`}
             />
-            <div className="space-y-2">
+            <div className="space-y-2 flex flex-col justify-center items-start">
               <p className="text-sm font-medium leading-none">
                 {selectedPlayer}
               </p>
@@ -76,13 +85,13 @@ export default function PlayerSelector({ tierType }: { tierType: string }) {
                 className="col-span-3"
                 placeholder="Search your player..."
                 onChange={(e) => {
-                  const filtered1 = players[0].players.filter((player) =>
-                    player.name
+                  const filtered1 = team1.filter((player) =>
+                    player.player_name
                       .toLowerCase()
                       .includes(e.target.value.toLowerCase())
                   );
-                  const filtered2 = players[1].players.filter((player) =>
-                    player.name
+                  const filtered2 = team2.filter((player) =>
+                    player.player_name
                       .toLowerCase()
                       .includes(e.target.value.toLowerCase())
                   );
@@ -93,19 +102,22 @@ export default function PlayerSelector({ tierType }: { tierType: string }) {
             </div>
             <Separator />
             <div className="h-56 overflow-y-auto">
-              <h4 className="mt-2 mb-2 text-sky-400">{team1name}</h4>
-              {team1Players.map((player) => (
-                <div className="flex gap-4 p-2 items-center justify-between">
+              <h4 className="mt-2 mb-2 text-sky-400">{team1Name}</h4>
+              {team1Players?.map((player) => (
+                <div
+                  className="flex gap-4 p-2 items-center justify-between"
+                  key={player.player_id}
+                >
                   <label
                     htmlFor="terms"
                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   >
-                    {player.name}
+                    {player.player_name}
                   </label>
                   <Button
                     variant="outline"
                     onClick={() => {
-                      setSelectedPlayer(player.name);
+                      setSelectedPlayer(player.player_name);
                     }}
                   >
                     Add
@@ -113,19 +125,22 @@ export default function PlayerSelector({ tierType }: { tierType: string }) {
                 </div>
               ))}
               <Separator className="mt-2 mb-2" />
-              <h4 className="mt-2 mb-2 text-sky-400">{team2name}</h4>
-              {team2Players.map((player) => (
-                <div className="flex gap-4 p-2 items-center justify-between">
+              <h4 className="mt-2 mb-2 text-sky-400">{team2Name}</h4>
+              {team2Players?.map((player) => (
+                <div
+                  className="flex gap-4 p-2 items-center justify-between"
+                  key={player.player_id}
+                >
                   <label
                     htmlFor="terms"
                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   >
-                    {player.name}
+                    {player.player_name}
                   </label>
                   <Button
                     variant="outline"
                     onClick={() => {
-                      setSelectedPlayer(player.name);
+                      setSelectedPlayer(player.player_name);
                     }}
                   >
                     Add

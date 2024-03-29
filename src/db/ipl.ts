@@ -1,4 +1,5 @@
-import sql from "./postgres";
+import DBClient from "./client";
+const sql = DBClient.getInstance().sql;
 
 export async function listTeams() {
   return await sql`
@@ -28,7 +29,7 @@ export async function addUserDetails(details: {
   `;
 }
 
-export async function isFirstTimeUser(email :string) {
+export async function isFirstTimeUser(email: string) {
   return await sql`SELECT * FROM user_info WHERE user_email = ${email};`;
 }
 
@@ -36,4 +37,6 @@ export async function getMatchDetails(matchId: number) {
   return await sql`SELECT * FROM match WHERE match_id = ${matchId};`;
 }
 
-
+export async function getTeamDetails(teamId: number) {
+  return await sql`SELECT * FROM team WHERE team_id = ${teamId};`;
+}
