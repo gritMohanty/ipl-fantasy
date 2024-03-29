@@ -22,25 +22,34 @@ import {
 import { signOut, useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { DropdownMenuLabel } from "@radix-ui/react-dropdown-menu";
+import { useEffect, useState } from "react";
 
-const notifications = [
-  {
-    title: "PKBS vs DD",
-    description: "March 28",
-  },
-  {
-    title: "CSK vs MI",
-    description: "March 29",
-  },
-  {
-    title: "RCB vs SRH",
-    description: "April 2",
-  },
-];
-type CardProps = React.ComponentProps<typeof Card>;
+type Match = {
+  match_id: number;
+  match_name: string;
+  first_team_id: number;
+  second_team_id: number;
+  winning_team_id: number;
+  match_date: string;
+};
 export default function Dashboard() {
+  const [matches, setMatches] = useState<Match[]>([]);
+  useEffect(() => {
+    fetchMatches();
+  }, []);
+
+  const fetchMatches = async () => {
+    const matchData: any = await fetch("api/matches");
+    const matchList: { data: Match[] } = await matchData.json();
+    setMatches(matchList?.data);
+  };
+
+  const getNewDate = (date: string) => {
+    const newDate = new Date(date);
+    const formattedDate = newDate.toDateString();
+    return formattedDate;
+  };
   const { data: session } = useSession();
-  console.log(session, "session etails");
   if (!session) redirect("/");
   return (
     <main className="flex justify-center items-center mt-8">
@@ -72,15 +81,15 @@ export default function Dashboard() {
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className="grid gap-4">
-            {notifications.map((notification, index) => (
-              <Link href="/matches/1" key={index}>
+            {matches?.map((match) => (
+              <Link href={`/matches/${match.match_id}`} key={match.match_id}>
                 <div className=" flex items-center space-x-4 rounded-md border p-4 cursor-pointer">
                   <div className="flex-1 space-y-1">
                     <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
-                      {notification.title}
+                      {match.match_name}
                     </h4>
                     <p className="text-sm text-muted-foreground">
-                      {notification.description}
+                      {getNewDate(match.match_date)}
                     </p>
                     <div className="flex flex-row justify-start gap-2">
                       <Avatar>
@@ -105,11 +114,6 @@ export default function Dashboard() {
             ))}
           </div>
         </CardContent>
-        <CardFooter>
-          <Button className="w-full" variant="outline">
-            <Link href="/configure">Configure teams for other matches</Link>
-          </Button>
-        </CardFooter>
       </Card>
     </main>
   );

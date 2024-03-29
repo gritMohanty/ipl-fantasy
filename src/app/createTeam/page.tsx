@@ -13,6 +13,8 @@ import { avatars } from "./avatars";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
+import Link from "next/link";
 
 export default function CreateTeam() {
   const { data: session } = useSession();
@@ -26,7 +28,7 @@ export default function CreateTeam() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...details, email: session?.user?.email ?? "" }),
     });
-    console.log(data)
+    //need to handle error here
   };
   return (
     <div className="flex justify-center mt-8">
@@ -63,12 +65,14 @@ export default function CreateTeam() {
           />
         </CardContent>
         <CardFooter className="flex justify-center">
-          <Button
-            onClick={addTeam}
-            disabled={!(details.avatar && details.teamName)}
-          >
-            Create my team
-          </Button>
+          <Link href="/dashboard">
+            <Button
+              onClick={addTeam}
+              disabled={!(details.avatar && details.teamName)}
+            >
+              Create my team
+            </Button>
+          </Link>
         </CardFooter>
       </Card>
     </div>

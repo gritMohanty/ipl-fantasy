@@ -1,12 +1,13 @@
-"use client"
+"use client";
 import { AvatarImage, Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
-export default function Match({ params }: { params: { slug: string } }) {
+export default function Match({ params }: { params: { matchId: number } }) {
   return (
-    <div className="flex justify-center items-center mt-8 ">
+    <div className="flex justify-center items-center m-8 flex-col">
       <Card className={cn("w-[100%] p-4 m-8")}>
         <CardTitle className={cn("mb-8 mt-2")}>PKBS vs DD</CardTitle>
         <Link href="/teams/falcon-firefly">
@@ -33,6 +34,11 @@ export default function Match({ params }: { params: { slug: string } }) {
           <p>25</p>
         </div>
       </Card>
+      <Button className="w-full" variant="outline">
+        <Link href={`/configure/${params.matchId}`}>
+          Configure my team for this match
+        </Link>
+      </Button>
     </div>
   );
 }

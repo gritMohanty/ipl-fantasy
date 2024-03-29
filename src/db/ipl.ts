@@ -1,11 +1,5 @@
 import sql from "./postgres";
 
-// export interface ToDo {
-//   id: number;
-//   text: string;
-//   done: boolean;
-// }
-
 export async function listTeams() {
   return await sql`
     SELECT * FROM team`;
@@ -34,23 +28,12 @@ export async function addUserDetails(details: {
   `;
 }
 
-// export async function create(todo: ToDo) {
-//   return await sql<ToDo[]>`
-//     INSERT INTO todos (text, done) VALUES (${todo.text}, false)
-//     RETURNING id, text, done
-//   `;
-// }
+export async function isFirstTimeUser(email :string) {
+  return await sql`SELECT * FROM user_info WHERE user_email = ${email};`;
+}
 
-// export async function update(todo: ToDo) {
-//   return await sql<ToDo[]>`
-//     UPDATE todos SET done=${todo.done} WHERE id=${todo.id}
-//     RETURNING id, text, done
-//   `;
-// }
+export async function getMatchDetails(matchId: number) {
+  return await sql`SELECT * FROM match WHERE match_id = ${matchId};`;
+}
 
-// export async function remove(todo: ToDo) {
-//   return await sql<ToDo[]>`
-//     DELETE FROM todos WHERE id=${todo.id}
-//     RETURNING id, text, done
-//   `;
-// }
+
