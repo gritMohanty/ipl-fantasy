@@ -40,3 +40,29 @@ export async function getMatchDetails(matchId: number) {
 export async function getTeamDetails(teamId: number) {
   return await sql`SELECT * FROM team WHERE team_id = ${teamId};`;
 }
+
+export async function updatePerformance(details: {
+  performance_id: number;
+  match_id: number;
+  runs: number;
+  balls_played: number;
+  fours: number;
+  sixes: number;
+  strike_rate: number;
+  maidens: number;
+  wicket_taken: number;
+  catch_outs: number;
+  run_outs: number;
+  player_id: number;
+}) {
+  return await sql`
+  INSERT INTO performance (match_id, runs, balls_played, fours, sixes, strike_rate, maidens, wicket_taken, catch_outs, run_outs, player_id)
+  VALUES (${details.match_id}, ${details.runs}, ${details.balls_played}, ${details.fours}, ${details.sixes}, ${details.strike_rate}, ${details.maidens}, ${details.wicket_taken}, ${details.catch_outs}, ${details.run_outs}, ${details.player_id})
+  `;
+}
+
+export async function getPlayerId(playerName: string){
+return await sql`SELECT player_id
+FROM players
+WHERE LOWER(player_name) = LOWER(${playerName});`;
+}

@@ -14,11 +14,19 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+type SelectedPlayer = {
+  userId: number;
+  matchId: number;
+  playerId: number;
+  performanceId: number;
+};
+
 export default function Configure({ params }: { params: { matchId: number } }) {
   const [team1, setTeam1] = useState([]);
   const [team2, setTeam2] = useState([]);
   const [team1Name, setTeam1Name] = useState("");
   const [team2Name, setTeam2Name] = useState("");
+  const [selectedPlayers, setSelectedPlayers] = useState<SelectedPlayer[]>([]);
   useEffect(() => {
     getMatchDetails();
   }, []);
@@ -71,18 +79,24 @@ export default function Configure({ params }: { params: { matchId: number } }) {
               team2={team2}
               team1Name={team1Name}
               team2Name={team2Name}
+              matchId={params.matchId}
+              setSelectedPlayers={setSelectedPlayers}
             />
             <PlayerSelector
               team1={team1}
               team2={team2}
               team1Name={team1Name}
               team2Name={team2Name}
+              matchId={params.matchId}
+              setSelectedPlayers={setSelectedPlayers}
             />
             <PlayerSelector
               team1={team1}
               team2={team2}
               team1Name={team1Name}
               team2Name={team2Name}
+              matchId={params.matchId}
+              setSelectedPlayers={setSelectedPlayers}
             />
           </div>
         </div>
@@ -103,12 +117,16 @@ export default function Configure({ params }: { params: { matchId: number } }) {
               team2={team2}
               team1Name={team1Name}
               team2Name={team2Name}
+              matchId={params.matchId}
+              setSelectedPlayers={setSelectedPlayers}
             />
             <PlayerSelector
               team1={team1}
               team2={team2}
               team1Name={team1Name}
               team2Name={team2Name}
+              matchId={params.matchId}
+              setSelectedPlayers={setSelectedPlayers}
             />
           </div>
         </div>
@@ -129,6 +147,8 @@ export default function Configure({ params }: { params: { matchId: number } }) {
               team2={team2}
               team1Name={team1Name}
               team2Name={team2Name}
+              matchId={params.matchId}
+              setSelectedPlayers={setSelectedPlayers}
             />
           </div>
         </div>

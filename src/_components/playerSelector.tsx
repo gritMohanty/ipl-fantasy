@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 
-import { players } from "@/app/players";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
@@ -28,17 +27,17 @@ export default function PlayerSelector({
   const [team1Players, setTeam1Players] = useState([]);
   const [team2Players, setTeam2Players] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedPlayer, setSelectedPlayer] = useState("Select your player");
+  const [selectedPlayer, setSelectedPlayer] = useState<string | number>("Select your player");
   const getPlayerTeam = () => {
     if (selectedPlayer === "Select your player") {
       return "No Player selected";
     } else {
       const findPlayerinTeam1 = team1Players.filter(
-        (player) => player.player_name === selectedPlayer
+        (player) => player.player_id === selectedPlayer
       );
 
       const findPlayerinTeam2 = team2Players.filter(
-        (player) => player.player_name === selectedPlayer
+        (player) => player.player_id === selectedPlayer
       );
 
       if (findPlayerinTeam1.length) return team1Name;
@@ -117,7 +116,7 @@ export default function PlayerSelector({
                   <Button
                     variant="outline"
                     onClick={() => {
-                      setSelectedPlayer(player.player_name);
+                      setSelectedPlayer(player.player_id);
                     }}
                   >
                     Add
@@ -140,7 +139,7 @@ export default function PlayerSelector({
                   <Button
                     variant="outline"
                     onClick={() => {
-                      setSelectedPlayer(player.player_name);
+                      setSelectedPlayer(player.player_id);
                     }}
                   >
                     Add
